@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using ShopApp.Models;
@@ -16,11 +16,11 @@ namespace ShopApp
 
         public FormLogin()
         {
-            // ▸ ТЗ: название приложения в заголовке и в логотипе — менять под формулировку задания.
-            Text = "Авторизация — Магазин обуви";
-            // ▸ ТЗ: шрифт и размер. Часто в ТЗ хотят Segoe UI / Calibri / TNR.
+            // * ТЗ: название приложения в заголовке и в логотипе - менять под формулировку задания.
+            Text = "Авторизация - Магазин обуви";
+            // * ТЗ: шрифт и размер. Часто в ТЗ хотят Segoe UI / Calibri / TNR.
             Font = new Font("Times New Roman", 11F);
-            // ▸ ТЗ: фоновый цвет. Бренд-цвета из ТЗ подставляем сюда.
+            // * ТЗ: фоновый цвет. Бренд-цвета из ТЗ подставляем сюда.
             BackColor = Color.White;
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -58,7 +58,7 @@ namespace ShopApp
                 Text = "Войти",
                 Location = new Point(150, 260),
                 Size = new Size(105, 32),
-                // ▸ ТЗ: акцентный цвет главной кнопки. Меняется под палитру варианта.
+                // * ТЗ: акцентный цвет главной кнопки. Меняется под палитру варианта.
                 BackColor = Color.FromArgb(76, 175, 80),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat

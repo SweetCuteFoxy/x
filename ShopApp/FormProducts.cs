@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using ShopApp.Models;
@@ -34,9 +34,9 @@ namespace ShopApp
             _isAdmin = user?.Role?.Code == "admin";
             _isManager = user?.Role?.Code == "manager";
 
-            // ▸ ТЗ: заголовок окна и название магазина — менять ПОД ФОРМУЛИРОВКУ задания.
-            Text = "Магазин обуви — Каталог" + (user != null ? $"  ({user.FullName} / {user.Role?.Name})" : "  (гость)");
-            // ▸ ТЗ: шрифт всего приложения. Times New Roman — типовой выбор для ИСИП.
+            // * ТЗ: заголовок окна и название магазина - менять ПОД ФОРМУЛИРОВКУ задания.
+            Text = "Магазин обуви - Каталог" + (user != null ? $"  ({user.FullName} / {user.Role?.Name})" : "  (гость)");
+            // * ТЗ: шрифт всего приложения. Times New Roman - типовой выбор для ИСИП.
             Font = new Font("Times New Roman", 11F);
             BackColor = Color.White;
             StartPosition = FormStartPosition.CenterScreen;
@@ -205,23 +205,23 @@ namespace ShopApp
             _flow.ResumeLayout();
         }
 
-        // ╔═══ ТЗ-БЛОК: КАРТОЧКА ТОВАРА ═════════════════════════════════════════╗
-        // ║ Здесь определяется визуал одной карточки. Что обычно меняется    ║
-        // ║ под разные ТЗ:                                                   ║
-        // ║   • правило окраски фона (StockQty<3, DiscountPct>=15) — § ТЗ    ║
-        // ║   • размер карточки Width/Height                                 ║
-        // ║   • набор полей (артикул, страна, материал, размер обуви и т.п.) ║
-        // ║   • кнопки внутри карточки («Купить», «В корзину», «Изменить»)   ║
-        // ╚══════════════════════════════════════════════════════════════════╝
+        //  ТЗ-БЛОК: КАРТОЧКА ТОВАРА
+        //  Здесь определяется визуал одной карточки. Что обычно меняется
+        //  под разные ТЗ:
+        //    • правило окраски фона (StockQty<3, DiscountPct>=15) - § ТЗ
+        //    • размер карточки Width/Height
+        //    • набор полей (артикул, страна, материал, размер обуви и т.п.)
+        //    • кнопки внутри карточки ("Купить", "В корзину", "Изменить")
+        //
         private Panel BuildCard(Product p)
         {
-            // ▸ ТЗ: цветовое правило фона. Поменяй условия под формулировку задания.
+            // * ТЗ: цветовое правило фона. Поменяй условия под формулировку задания.
             //   Часто требуют: пометить товары со скидкой, либо снятые с продажи.
             Color baseBg = Color.White;
-            if (p.StockQty < 3) baseBg = Color.FromArgb(255, 229, 180);          // персик — мало остатка
-            else if (p.DiscountPct >= 15) baseBg = Color.FromArgb(240, 255, 240); // зелёный — большая скидка
+            if (p.StockQty < 3) baseBg = Color.FromArgb(255, 229, 180);          // персик - мало остатка
+            else if (p.DiscountPct >= 15) baseBg = Color.FromArgb(240, 255, 240); // зелёный - большая скидка
 
-            // ▸ ТЗ: размер карточки. 360x230 — хватает на TNR 11pt без обрезки.
+            // * ТЗ: размер карточки. 360x230 - хватает на TNR 11pt без обрезки.
             var card = new Panel
             {
                 Width = 360,
@@ -234,7 +234,7 @@ namespace ShopApp
                 AccessibleDescription = baseBg.ToArgb().ToString()
             };
 
-            // ▸ ТЗ: размер фотографии и SizeMode. Zoom — пропорции, StretchImage — заполнить.
+            // * ТЗ: размер фотографии и SizeMode. Zoom - пропорции, StretchImage - заполнить.
             var pic = new PictureBox
             {
                 Location = new Point(8, 8),
@@ -253,7 +253,7 @@ namespace ShopApp
             }
             catch { }
 
-            // ▸ ТЗ: основной заголовок — название товара. AutoEllipsis обрезает длинный текст.
+            // * ТЗ: основной заголовок - название товара. AutoEllipsis обрезает длинный текст.
             var lblName = new Label
             {
                 Text = p.Name,
@@ -272,7 +272,7 @@ namespace ShopApp
                 AutoEllipsis = true
             };
 
-            // ▸ ТЗ: формат цены. Часто требуют зачёркнутую старую цену + новую.
+            // * ТЗ: формат цены. Часто требуют зачёркнутую старую цену + новую.
             string priceText = p.DiscountPct > 0
                 ? $"{p.FinalPrice:0.00} ₽   (-{p.DiscountPct}%)"
                 : $"{p.Price:0.00} ₽";
@@ -301,7 +301,7 @@ namespace ShopApp
                 AutoEllipsis = true
             };
 
-            // ▸ ТЗ: всплывающая подсказка с описанием — удобно когда оно длинное.
+            // * ТЗ: всплывающая подсказка с описанием - удобно когда оно длинное.
             var tip = new ToolTip { AutoPopDelay = 8000, InitialDelay = 400 };
             string descr = string.IsNullOrWhiteSpace(p.Description) ? p.Name : p.Description!;
             tip.SetToolTip(card, descr);
@@ -320,7 +320,7 @@ namespace ShopApp
                 if (chk.Checked) _selected.Add(p.Id); else _selected.Remove(p.Id);
             };
 
-            // ▸ ТЗ: кнопка администратора. Под другие роли — поменять _isAdmin условие.
+            // * ТЗ: кнопка администратора. Под другие роли - поменять _isAdmin условие.
             var btnEdit = new Button
             {
                 Text = "Изменить",
@@ -336,7 +336,7 @@ namespace ShopApp
                 if (f.ShowDialog() == DialogResult.OK) LoadData();
             };
 
-            // hover-эффект — чуть темнее текущий фон
+            // hover-эффект - чуть темнее текущий фон
             card.MouseEnter += (s, e) => card.BackColor = ControlPaint.Dark(baseBg, -0.05f);
             card.MouseLeave += (s, e) => card.BackColor = Color.FromArgb(int.Parse(card.AccessibleDescription!));
             foreach (Control c in new Control[] { pic, lblName, lblManuf, lblPrice, lblStock, lblCat })

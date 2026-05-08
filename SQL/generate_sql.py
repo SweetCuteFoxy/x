@@ -1,4 +1,4 @@
-"""Convert exam CSVs to a single create_db.sql file."""
+﻿"""Convert exam CSVs to a single create_db.sql file."""
 import csv
 from pathlib import Path
 
@@ -36,7 +36,7 @@ def insert(table: str, columns: list[str], cast: dict[str, str] | None = None) -
 
 
 HEADER = """-- =============================================================
---   Демо-проект ДЭ КОД 09.02.07 — Интернет-магазин обуви
+--   Демо-проект ДЭ КОД 09.02.07 - Интернет-магазин обуви
 --   Создание БД, схемы, заполнение данными
 -- =============================================================
 

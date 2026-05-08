@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using ShopApp.Models;
@@ -159,10 +159,10 @@ namespace ShopApp
                     o.OrderNum,
                     o.OrderDate.ToString("dd.MM.yyyy"),
                     o.DeliveryDate.ToString("dd.MM.yyyy"),
-                    o.User?.FullName ?? "—",
-                    o.PickupPoint?.Address ?? "—",
+                    o.User?.FullName ?? "-",
+                    o.PickupPoint?.Address ?? "-",
                     o.PickupCode,
-                    o.Status?.Name ?? "—",
+                    o.Status?.Name ?? "-",
                     o.Items.Sum(i => Math.Round(i.Product!.Price * (100 - i.Product.DiscountPct) / 100m, 2) * i.Quantity)
                 )).ToList();
 
