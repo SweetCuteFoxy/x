@@ -122,8 +122,8 @@ namespace ShopApp
             _price.Value = p.Price;
             _stock.Value = p.StockQty;
             _discount.Value = p.DiscountPct;
-            _photo.Text = p.Photo;
-            _description.Text = p.Description;
+            _photo.Text = p.Photo ?? "";
+            _description.Text = p.Description ?? "";
             _cbCategory.SelectedItem = _cbCategory.Items.Cast<Category>().FirstOrDefault(c => c.Id == p.CategoryId);
             _cbManuf.SelectedItem = _cbManuf.Items.Cast<Manufacturer>().FirstOrDefault(m => m.Id == p.ManufacturerId);
             _cbSupplier.SelectedItem = _cbSupplier.Items.Cast<Supplier>().FirstOrDefault(s => s.Id == p.SupplierId);

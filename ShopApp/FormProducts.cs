@@ -232,8 +232,9 @@ namespace ShopApp
             };
             try
             {
-                if (!string.IsNullOrWhiteSpace(p.Photo) && File.Exists(Path.Combine("photos", p.Photo)))
-                    pic.Image = Image.FromFile(Path.Combine("photos", p.Photo));
+                var photoName = p.Photo ?? "";
+                if (!string.IsNullOrWhiteSpace(photoName) && File.Exists(Path.Combine("photos", photoName)))
+                    pic.Image = Image.FromFile(Path.Combine("photos", photoName));
                 else if (File.Exists("picture.png"))
                     pic.Image = Image.FromFile("picture.png");
             }

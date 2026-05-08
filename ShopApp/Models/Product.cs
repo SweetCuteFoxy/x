@@ -15,8 +15,8 @@ namespace ShopApp.Models
         public Category? Category { get; set; }
         public int DiscountPct { get; set; }
         public int StockQty { get; set; }
-        public string Description { get; set; } = "";
-        public string Photo { get; set; } = "";
+        public string? Description { get; set; }
+        public string? Photo { get; set; }
         public List<OrderItem> OrderItems { get; set; } = new();
 
         // Цена со скидкой (для UI)
