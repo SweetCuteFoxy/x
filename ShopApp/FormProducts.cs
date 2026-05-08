@@ -34,11 +34,13 @@ namespace ShopApp
             _isAdmin = user?.Role?.Code == "admin";
             _isManager = user?.Role?.Code == "manager";
 
+            // ▸ ТЗ: заголовок окна и название магазина — менять ПОД ФОРМУЛИРОВКУ задания.
             Text = "Магазин обуви — Каталог" + (user != null ? $"  ({user.FullName} / {user.Role?.Name})" : "  (гость)");
+            // ▸ ТЗ: шрифт всего приложения. Times New Roman — типовой выбор для ИСИП.
             Font = new Font("Times New Roman", 11F);
             BackColor = Color.White;
             StartPosition = FormStartPosition.CenterScreen;
-            ClientSize = new Size(1100, 700);
+            ClientSize = new Size(1200, 760);
             try { Icon = new Icon("app.ico"); } catch { }
 
             BuildUi();
@@ -203,17 +205,27 @@ namespace ShopApp
             _flow.ResumeLayout();
         }
 
+        // ╔═══ ТЗ-БЛОК: КАРТОЧКА ТОВАРА ═════════════════════════════════════════╗
+        // ║ Здесь определяется визуал одной карточки. Что обычно меняется    ║
+        // ║ под разные ТЗ:                                                   ║
+        // ║   • правило окраски фона (StockQty<3, DiscountPct>=15) — § ТЗ    ║
+        // ║   • размер карточки Width/Height                                 ║
+        // ║   • набор полей (артикул, страна, материал, размер обуви и т.п.) ║
+        // ║   • кнопки внутри карточки («Купить», «В корзину», «Изменить»)   ║
+        // ╚══════════════════════════════════════════════════════════════════╝
         private Panel BuildCard(Product p)
         {
-            // Цвет по бизнес-правилу: малый остаток / большая скидка
+            // ▸ ТЗ: цветовое правило фона. Поменяй условия под формулировку задания.
+            //   Часто требуют: пометить товары со скидкой, либо снятые с продажи.
             Color baseBg = Color.White;
-            if (p.StockQty < 3) baseBg = Color.FromArgb(255, 229, 180);   // персиковый — мало остатка
-            else if (p.DiscountPct >= 15) baseBg = Color.FromArgb(240, 255, 240); // светло-зелёный — большая скидка
+            if (p.StockQty < 3) baseBg = Color.FromArgb(255, 229, 180);          // персик — мало остатка
+            else if (p.DiscountPct >= 15) baseBg = Color.FromArgb(240, 255, 240); // зелёный — большая скидка
 
+            // ▸ ТЗ: размер карточки. 360x230 — хватает на TNR 11pt без обрезки.
             var card = new Panel
             {
-                Width = 320,
-                Height = 200,
+                Width = 360,
+                Height = 230,
                 Margin = new Padding(8),
                 BackColor = baseBg,
                 BorderStyle = BorderStyle.FixedSingle,
@@ -222,10 +234,11 @@ namespace ShopApp
                 AccessibleDescription = baseBg.ToArgb().ToString()
             };
 
+            // ▸ ТЗ: размер фотографии и SizeMode. Zoom — пропорции, StretchImage — заполнить.
             var pic = new PictureBox
             {
                 Location = new Point(8, 8),
-                Size = new Size(110, 110),
+                Size = new Size(120, 120),
                 SizeMode = PictureBoxSizeMode.Zoom,
                 BackColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle
@@ -240,55 +253,65 @@ namespace ShopApp
             }
             catch { }
 
+            // ▸ ТЗ: основной заголовок — название товара. AutoEllipsis обрезает длинный текст.
             var lblName = new Label
             {
                 Text = p.Name,
-                Location = new Point(125, 8),
-                Size = new Size(190, 36),
-                Font = new Font("Times New Roman", 11F, FontStyle.Bold)
+                Location = new Point(135, 8),
+                Size = new Size(215, 40),
+                Font = new Font("Times New Roman", 11F, FontStyle.Bold),
+                AutoEllipsis = true
             };
 
             var lblManuf = new Label
             {
                 Text = $"{p.Manufacturer?.Name} | арт. {p.Article}",
-                Location = new Point(125, 48),
-                Size = new Size(190, 32),
-                ForeColor = Color.DimGray
+                Location = new Point(135, 50),
+                Size = new Size(215, 36),
+                ForeColor = Color.DimGray,
+                AutoEllipsis = true
             };
 
-            string priceText;
-            if (p.DiscountPct > 0)
-                priceText = $"{p.FinalPrice:0.00} ₽   (-{p.DiscountPct}%)";
-            else
-                priceText = $"{p.Price:0.00} ₽";
+            // ▸ ТЗ: формат цены. Часто требуют зачёркнутую старую цену + новую.
+            string priceText = p.DiscountPct > 0
+                ? $"{p.FinalPrice:0.00} ₽   (-{p.DiscountPct}%)"
+                : $"{p.Price:0.00} ₽";
             var lblPrice = new Label
             {
                 Text = priceText,
-                Location = new Point(125, 90),
-                Size = new Size(190, 22),
-                Font = new Font("Times New Roman", 12F, FontStyle.Bold),
+                Location = new Point(135, 92),
+                Size = new Size(215, 26),
+                Font = new Font("Times New Roman", 13F, FontStyle.Bold),
                 ForeColor = p.DiscountPct > 0 ? Color.FromArgb(46, 139, 87) : Color.Black
             };
 
             var lblStock = new Label
             {
                 Text = $"На складе: {p.StockQty} {p.Unit}",
-                Location = new Point(8, 125),
-                Size = new Size(180, 22)
+                Location = new Point(8, 138),
+                Size = new Size(200, 22)
             };
 
             var lblCat = new Label
             {
                 Text = $"Категория: {p.Category?.Name}",
-                Location = new Point(8, 148),
-                Size = new Size(310, 22),
-                ForeColor = Color.DimGray
+                Location = new Point(8, 162),
+                Size = new Size(345, 22),
+                ForeColor = Color.DimGray,
+                AutoEllipsis = true
             };
+
+            // ▸ ТЗ: всплывающая подсказка с описанием — удобно когда оно длинное.
+            var tip = new ToolTip { AutoPopDelay = 8000, InitialDelay = 400 };
+            string descr = string.IsNullOrWhiteSpace(p.Description) ? p.Name : p.Description!;
+            tip.SetToolTip(card, descr);
+            tip.SetToolTip(pic, descr);
+            tip.SetToolTip(lblName, descr);
 
             var chk = new CheckBox
             {
                 Text = "Выбрать",
-                Location = new Point(8, 170),
+                Location = new Point(8, 192),
                 AutoSize = true,
                 Checked = _selected.Contains(p.Id)
             };
@@ -297,11 +320,12 @@ namespace ShopApp
                 if (chk.Checked) _selected.Add(p.Id); else _selected.Remove(p.Id);
             };
 
+            // ▸ ТЗ: кнопка администратора. Под другие роли — поменять _isAdmin условие.
             var btnEdit = new Button
             {
                 Text = "Изменить",
-                Location = new Point(220, 168),
-                Size = new Size(95, 26),
+                Location = new Point(245, 190),
+                Size = new Size(105, 28),
                 FlatStyle = FlatStyle.Flat,
                 BackColor = Color.White,
                 Visible = _isAdmin
@@ -312,7 +336,7 @@ namespace ShopApp
                 if (f.ShowDialog() == DialogResult.OK) LoadData();
             };
 
-            // hover
+            // hover-эффект — чуть темнее текущий фон
             card.MouseEnter += (s, e) => card.BackColor = ControlPaint.Dark(baseBg, -0.05f);
             card.MouseLeave += (s, e) => card.BackColor = Color.FromArgb(int.Parse(card.AccessibleDescription!));
             foreach (Control c in new Control[] { pic, lblName, lblManuf, lblPrice, lblStock, lblCat })

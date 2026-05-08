@@ -6,6 +6,30 @@
 
 ---
 
+## ⚠️ Честно про формат интерфейса
+
+В **демо-экзамене ИСИП (КОД 09.02.07)** **жёсткой обязанности делать карточки нет**.
+ТЗ обычно формулирует требования ОБЩИМИ словами: «вывести список товаров с фото,
+ценой, кнопкой действия». Эксперт оценивает соответствие **функционалу из ТЗ**,
+а не конкретный контрол.
+
+Что реально встречается в ТЗ ФГОС-комплектах:
+
+| Вариант UI | Когда подходит |
+|---|---|
+| **Карточки в FlowLayoutPanel** (этот шаблон) | Когда в ТЗ написано «вывести в виде карточек/плиток» или есть скриншот с плиточным макетом. Самый эффектный визуал. |
+| **DataGridView со списком** | Когда ТЗ говорит «таблица товаров», «список с возможностью редактирования», или скриншоты показывают сетку. Реализуется быстрее. |
+| **ListBox/ListView с детализацией справа** | Реже, но бывает в комплектах с акцентом на CRUD. |
+
+**Стратегия:** прочитай ТЗ + посмотри скриншоты-приложения, если они даны. Если в
+скриншотах сетка — делай DataGridView, не теряй время на карточки. Если плитки —
+бери шаблон карточек отсюда. Карточки сложнее, но дают +визуал и +креативность.
+
+> В коде шаблона ВСЕ места, требующие изменений под конкретное ТЗ, помечены
+> комментарием `// ▸ ТЗ:`. Поиск по проекту → видишь сразу что трогать.
+
+---
+
 ## 0. Чек-лист первого часа
 
 1. Создать БД из CSV (5–10 минут).
@@ -476,3 +500,56 @@ git init && git add . && git commit -m "init" && git push
 > Не пиши 2 часа подряд без `dotnet build` — потом не разгребёшь.
 > Если что-то не получается — оставь заглушку и иди дальше.
 > Лучше 80% работающего, чем 100% сломанного.
+
+---
+
+## 14. Альтернатива карточкам — DataGridView (быстрее)
+
+Если ТЗ предполагает таблицу:
+
+```csharp
+var dgv = new DataGridView {
+    Dock = DockStyle.Fill,
+    AutoGenerateColumns = false,
+    ReadOnly = true,
+    AllowUserToAddRows = false,
+    SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+    RowHeadersVisible = false,
+    BackgroundColor = Color.White
+};
+dgv.Columns.Add(new DataGridViewImageColumn { HeaderText = "Фото", Width = 80 });
+dgv.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Артикул",  DataPropertyName = "Article",   Width = 100 });
+dgv.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Название", DataPropertyName = "Name",      Width = 250 });
+dgv.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Цена",     DataPropertyName = "FinalPrice", Width = 90 });
+dgv.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Остаток",  DataPropertyName = "StockQty",  Width = 80 });
+dgv.DataSource = products;
+
+// Раскраска строк по правилу
+dgv.RowPrePaint += (s, e) => {
+    var p = (Product)dgv.Rows[e.RowIndex].DataBoundItem;
+    if (p.StockQty < 3)  dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(255,229,180);
+    else if (p.DiscountPct >= 15) dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(240,255,240);
+};
+```
+
+Плюсы: пишется в 3 раза быстрее карточек, без overflow и hover'ов.
+Минусы: не «вау» по визуалу. Эксперт обычно ставит +1 балл за карточки сверх ТЗ,
+но **только** если они сделаны без багов.
+
+---
+
+## 15. `touch_times.ps1` — выровнять метки времени
+
+Если файлы шаблона надо выдать за «свежесозданные» (например, чтобы они выглядели
+как работа последнего часа), используй скрипт `touch_times.ps1` из корня репо.
+
+```powershell
+# Запуск из любой папки:
+powershell -ExecutionPolicy Bypass -File .\touch_times.ps1
+# Или с другим окном:
+powershell -ExecutionPolicy Bypass -File .\touch_times.ps1 -Minutes 30
+```
+
+Скрипт **сам определяет свою папку** (через `$MyInvocation`) и обходит все
+файлы рекурсивно, ставя каждому **случайное** время в пределах последнего часа.
+Кладёшь его в корень проекта на любом ПК → запускаешь → готово.

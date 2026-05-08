@@ -25,6 +25,7 @@ namespace ShopApp
         {
             _productId = productId;
             Text = productId == null ? "Новый товар" : "Редактирование товара";
+            // ▸ ТЗ: шрифт/фон/размер окна — под вариант. Список полей в BuildUi() также меняется.
             Font = new Font("Times New Roman", 11F);
             BackColor = Color.White;
             StartPosition = FormStartPosition.CenterParent;
